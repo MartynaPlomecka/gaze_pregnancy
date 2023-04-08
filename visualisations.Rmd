@@ -1,0 +1,88 @@
+---
+title: "Visualisations"
+author: "Martyna"
+date: "2023-04-07"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r}
+library(ggplot2)
+# Load the CSV file into a data frame
+# Load the CSV file into a data frame
+setwd("~/dev/Denise")
+df <- read.csv("data4analysis.csv")
+
+```
+
+
+
+verification that the number of trials is consistent across all tasks.
+```{r}
+ggplot(df, aes(x = factor(task))) + 
+  geom_bar() + 
+  labs(x = "Task", y = "Trial Count") +
+  ggtitle("Trial Counts by Task")
+```
+
+
+
+Box plots of reaction times by task and trial type:
+```{r}
+ggplot(df, aes(x = factor(task), y = sacc_time, fill = factor(type))) + 
+  geom_boxplot() + 
+  labs(x = "Task", y = "Saccade Time (ms)", fill = "Trial Type") +
+  ggtitle("Reaction Times by Task and Trial Type")
+
+
+```
+
+
+
+Density plots of peak velocity by trial type:
+```{r}
+c = ggplot(df, aes(x = peak_vel, color = factor(group))) + 
+  geom_density() + 
+  labs(x = "Peak Velocity", y = "Density", color = "Trial Type") +
+  ggtitle("Peak Velocity Density by Trial Type")
+
+c
+```
+
+Grouped bar chart of mean reaction time by type and group:
+```{r}
+ggplot(df, aes(x = factor(type), y = sacc_time, fill = factor(group))) + 
+  stat_summary(fun = mean, geom = "bar", position = position_dodge(), color = "black") + 
+  labs(x = "Saccade Type", y = "Mean Reaction Time (ms)", fill = "Group") +
+  ggtitle("Mean Reaction Time by Saccade Type and Group")
+
+```
+
+Grouped box plot of peak velocity by type and group:
+```{r}
+ggplot(df, aes(x = factor(type), y = peak_vel, fill = factor(group))) + 
+  geom_boxplot(position = position_dodge()) + 
+  labs(x = "Saccade Type", y = "Peak Velocity", fill = "Group") +
+  ggtitle("Peak Velocity by Saccade Type and Group")
+
+```
+
+use the scale_y_continuous function with the limits argument to remove outliers from the box plot and focus on the main distribution of data. 
+```{r}
+ggplot(df, aes(x = factor(type), y = peak_vel, fill = factor(group))) + 
+  geom_boxplot(outlier.shape = NA, position = position_dodge()) + 
+  scale_y_continuous(limits = quantile(df$peak_vel, c(0.05, 0.95))) +
+  labs(x = "Saccade Type", y = "Peak Velocity", fill = "Group") +
+  ggtitle("Peak Velocity by Saccade Type and Group")
+```
+
+Grouped bar chart of error rate by type and group:
+```{r}
+ggplot(df, aes(x = factor(type), y = error, fill = factor(group))) + 
+  stat_summary(fun = mean, geom = "bar", position = position_dodge(), color = "black") + 
+  labs(x = "Saccade Type", y = "Error Rate", fill = "Group") +
+  ggtitle("Error Rate by Saccade Type and Group")
+
+```
