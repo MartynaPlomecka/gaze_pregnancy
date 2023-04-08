@@ -4,7 +4,7 @@ library(dplyr)
 library(tidyr)
 library(readxl)
 library(readr)
-setwd("~/dev/Denise")
+setwd("~/dev/pregnancy_gaze")
 
 
 df <- read_csv("data4analysis.csv")

@@ -1,7 +1,7 @@
 ###PART1
 library(stringr)
 library(dplyr)
-setwd("~/dev/Denise")
+setwd("~/dev/pregnancy_gaze")
 allsbj <- read.csv("allSubj_output.csv")
 allsbj <- na.omit(allsbj)
 

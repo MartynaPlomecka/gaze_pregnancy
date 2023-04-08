@@ -10,11 +10,8 @@ output:
 
 ```{r}
 library(ggplot2)
-# Load the CSV file into a data frame
-# Load the CSV file into a data frame
-setwd("~/dev/Denise")
+setwd("~/dev/pregnancy_gaze")
 df <- read.csv("data4analysis.csv")
-
 ```
 
 

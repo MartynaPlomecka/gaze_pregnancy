@@ -19,9 +19,10 @@ library(readr)
 my_colors <- brewer.pal(3, "Set1")
 
 # set working directory and upload dataset
-setwd("~/dev/Denise")
+setwd("~/dev/pregnancy_gaze")
 df<- read_csv("table_ready_with_psycho.csv")
 ```
+
 ```{r}
 # Create a new data frame with the variables of interest
 new_data_long <- select(df, group, mean_peak_vel_anti, mean_peak_vel_pro) %>%
@@ -29,13 +30,44 @@ new_data_long <- select(df, group, mean_peak_vel_anti, mean_peak_vel_pro) %>%
   mutate(type = ifelse(type == "mean_peak_vel_anti", "Antisaccade", "Prosaccade"))
 
 new_data_long$group <- as.factor(new_data_long$group)
-
-# Create the plot
+  
+  
 ggplot(new_data_long, aes(x = group, y = mean_peak_vel, fill = type)) +
-  geom_violin(scale = "count", alpha = 0.8, trim = TRUE) +
-  scale_fill_manual(values = my_colors, guide = guide_legend(title = "Saccade Type")) +
+  geom_violin(scale = "count", alpha = 0.4, trim = TRUE) +
+  geom_violin(scale = "count", alpha = 0.4, trim = TRUE) +
+  geom_point(width = 0.2, size = 2, alpha = 0.8, aes(color = type), position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.8)) + # Separate jittered points  geom_boxplot(width = 0.15, alpha = 0.6, aes(color = type), position = position_dodge(0.8)) +
+  scale_fill_manual(values = my_colors, name = "Saccade Type") +
+  scale_color_manual(values = my_colors, name = "Saccade Type") + # Combine legends
   labs(x = "Group", y = "Mean Peak Velocity (degrees/second)", fill = "") +
   ggtitle("Distribution of Mean Peak Velocity by Group and Saccade Type") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12),
+        legend.title = element_text(size = 14),
+        legend.text = element_text(size = 12))
+
+
+```
+
+```{r}
+# Creating a new data frame with the rt as var of interest
+new_data_long <- select(df, group, mean_sacc_time_anti, mean_sacc_time_pro) %>%
+  pivot_longer(cols = c(mean_sacc_time_anti, mean_sacc_time_pro), names_to = "type", values_to = "mean_sacc_time") %>%
+  mutate(type = ifelse(type == "mean_sacc_time_anti", "Antisaccade", "Prosaccade"))
+
+new_data_long$group <- as.factor(new_data_long$group)
+
+# Create the plot
+ggplot(new_data_long, aes(x = group, y = mean_sacc_time, fill = type)) +
+    geom_violin(scale = "count", alpha = 0.4, trim = TRUE) +
+  geom_point(width = 0.2, size = 2, alpha = 0.8, aes(color = type), 
+             position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.8)) + # Separate jittered points
+  geom_boxplot(width = 0.15, alpha = 0.6, aes(color = type), position = position_dodge(0.8)) +
+  scale_fill_manual(values = my_colors, name = "Saccade Type") +
+  scale_color_manual(values = my_colors, name = "Saccade Type") + # Combine legends
+  labs(x = "Group", y = "Mean Reaction Time (ms)") +
+  ggtitle("Distribution of Mean Reaction Time by Group and Saccade Type") +
   theme_minimal() +
   theme(plot.title = element_text(size = 15, hjust = 0.5),
         axis.title = element_text(size = 14),
@@ -46,22 +78,23 @@ ggplot(new_data_long, aes(x = group, y = mean_peak_vel, fill = type)) +
 ```
 
 ```{r}
-# Creating a new data frame with the rt as var of interest
-new_data_long <- select(df, group, mean_sacc_time_anti, mean_sacc_time_pro) %>%
-  pivot_longer(cols = c(mean_sacc_time_anti, mean_sacc_time_pro), names_to = "type", values_to = "mean_peak_vel") %>%
-  mutate(type = ifelse(type == "mean_sacc_time_anti", "Antisaccade", "Prosaccade"))
+# Create a new data frame with the errors pro/anti
+new_data_long <- select(df, group, cum_errors_pro, cum_errors_anti) %>%
+  pivot_longer(cols = c(cum_errors_pro, cum_errors_anti), names_to = "type", values_to = "cum_errors") %>%
+  mutate(type = ifelse(type == "cum_errors_anti", "Antisaccade", "Prosaccade"))
 
 new_data_long$group <- as.factor(new_data_long$group)
 
 # Create the plot
-ggplot(new_data_long, aes(x = group, y = mean_peak_vel, fill = type)) +
+ggplot(new_data_long, aes(x = group, y = cum_errors, fill = type)) +
   geom_violin(scale = "count", alpha = 0.4, trim = TRUE) +
-  geom_jitter(width = 0.2, size = 2, alpha = 0.8, aes(color = type)) +
+  geom_point(width = 0.2, size = 2, alpha = 0.8, aes(color = type), 
+             position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.8)) + # Separate jittered points
   geom_boxplot(width = 0.15, alpha = 0.6, aes(color = type), position = position_dodge(0.8)) +
   scale_fill_manual(values = my_colors, name = "Saccade Type") +
-  scale_color_manual(values = my_colors, name = "Saccade Type") + # Combine legends
-  labs(x = "Group", y = "Mean Reaction Time (ms)") +
-  ggtitle("Distribution of Mean Reaction Time by Group and Saccade Type") +
+  scale_color_manual(values = my_colors, name = "Saccade Type") +
+  labs(x = "Group", y = "Cumulative Errors") + # Update y-axis label
+  ggtitle("Distribution of Cumulative Errors by Group and Saccade Type") +
   theme_minimal() +
   theme(plot.title = element_text(size = 15, hjust = 0.5),
         axis.title = element_text(size = 14),
