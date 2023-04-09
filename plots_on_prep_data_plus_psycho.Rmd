@@ -35,7 +35,7 @@ new_data_long$group <- as.factor(new_data_long$group)
 ggplot(new_data_long, aes(x = group, y = mean_peak_vel, fill = type)) +
   geom_violin(scale = "count", alpha = 0.4, trim = TRUE) +
   geom_violin(scale = "count", alpha = 0.4, trim = TRUE) +
-  geom_point(width = 0.2, size = 2, alpha = 0.8, aes(color = type), position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.8)) + # Separate jittered points  geom_boxplot(width = 0.15, alpha = 0.6, aes(color = type), position = position_dodge(0.8)) +
+  geom_point(width = 0.2, size = 1.7, alpha = 0.8, aes(color = type), position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.8)) + # Separate jittered points  geom_boxplot(width = 0.15, alpha = 0.6, aes(color = type), position = position_dodge(0.8)) +
   scale_fill_manual(values = my_colors, name = "Saccade Type") +
   scale_color_manual(values = my_colors, name = "Saccade Type") + # Combine legends
   labs(x = "Group", y = "Mean Peak Velocity (degrees/second)", fill = "") +
@@ -61,7 +61,7 @@ new_data_long$group <- as.factor(new_data_long$group)
 # Create the plot
 ggplot(new_data_long, aes(x = group, y = mean_sacc_time, fill = type)) +
     geom_violin(scale = "count", alpha = 0.4, trim = TRUE) +
-  geom_point(width = 0.2, size = 2, alpha = 0.8, aes(color = type), 
+  geom_point(width = 0.2, size = 1.7, alpha = 0.8, aes(color = type), 
              position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.8)) + # Separate jittered points
   geom_boxplot(width = 0.15, alpha = 0.6, aes(color = type), position = position_dodge(0.8)) +
   scale_fill_manual(values = my_colors, name = "Saccade Type") +
@@ -88,7 +88,7 @@ new_data_long$group <- as.factor(new_data_long$group)
 # Create the plot
 ggplot(new_data_long, aes(x = group, y = cum_errors, fill = type)) +
   geom_violin(scale = "count", alpha = 0.4, trim = TRUE) +
-  geom_point(width = 0.2, size = 2, alpha = 0.8, aes(color = type), 
+  geom_point(width = 0.2, size = 1.7, alpha = 0.8, aes(color = type), 
              position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.8)) + # Separate jittered points
   geom_boxplot(width = 0.15, alpha = 0.6, aes(color = type), position = position_dodge(0.8)) +
   scale_fill_manual(values = my_colors, name = "Saccade Type") +
