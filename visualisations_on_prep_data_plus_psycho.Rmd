@@ -138,3 +138,37 @@ ggplot(new_data_long, aes(x = EPDS_SUM, y = cum_errors, color = type, group = in
 
 ```
 
+
+
+
+```{r}
+# Create a new data frame with the variables of interest
+new_data_long <- select(df, group, STAI_S_SUM, cum_errors_pro, cum_errors_anti) %>%
+  pivot_longer(cols = c(cum_errors_pro, cum_errors_anti), names_to = "type", values_to = "cum_errors") %>%
+  mutate(type = ifelse(type == "cum_errors_anti", "Antisaccade", "Prosaccade"))
+
+new_data_long$group <- as.factor(new_data_long$group)
+
+# Calculate Spearman correlation coefficients for each combination of saccade type and group
+correlations <- new_data_long %>%
+  group_by(type, group) %>%
+  summarize(spearman_rho = cor.test(STAI_S_SUM, cum_errors, method = "spearman")$estimate)
+
+# Print the correlations
+print(correlations)
+
+# Create the plot
+ggplot(new_data_long, aes(x = STAI_S_SUM, y = cum_errors, color = type, group = interaction(type, group))) +
+  geom_point(size = 3, alpha = 0.8, aes(shape = group)) +
+  geom_smooth(method = "lm", se = FALSE, aes(linetype = group)) + # Fit a regression line
+  scale_color_manual(values = my_colors, name = "Saccade Type") +
+  labs(x = "STAI_T_SUM (Anxiety Scale)", y = "Cumulative Errors") +
+  ggtitle("Correlation of Cumulative Errors and STAI_S_SUM by Saccade Type and Group") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 15, hjust = 0.5),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12),
+        legend.title = element_text(size = 14),
+        legend.text = element_text(size = 12))
+
+```
